@@ -23,16 +23,12 @@ module.exports = {
     connection.connect();
 
     connection.query('INSERT INTO users (name) VALUES (\'' + name + '\');', function(err, rows) {
-      console.log('inside postuser query', err);
     });
 
     connection.end();
-    console.log('connection ended from userpost');
   },
 
   postMessage: function(name, message, room) {
-    console.log('in DB handler', name, message, room);
-
     var connection = mysql.createConnection({
       host: 'localhost',
       user: 'root',
@@ -42,10 +38,12 @@ module.exports = {
   
     connection.connect();
 
-    connection.query('INSERT INTO messages (username) VALUES (7);'), function(err, rows) {
-      console.log('postmessage cb');
+    connection.query('INSERT INTO messages (username, message, room) ' +
+      'VALUES ((SELECT id FROM users where name=\'' + name + '\'), ' +
+      '\'' + message + '\', ' + 
+      '\'' + room + '\');', function(err, rows) {
       if (err) { throw err; }
-    };
+    });
     // connection.query('INSERT INTO messages (message) VALUES (\'hi\');', function(err, rows) {
     //   //'VALUES (SELECT id FROM users WHERE name=\'Valjean\', \'' + message + '\');', function(err, rows) {
     //   // 'VALUES (1, \'Valjean\');', function(err, rows) {
@@ -54,6 +52,5 @@ module.exports = {
     // });
 
     connection.end();
-    console.log('connection ended from message post');
   }
 };

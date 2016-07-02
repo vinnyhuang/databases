@@ -14,8 +14,6 @@ module.exports = {
 
     }, // a function which handles a get request for all messages
     post: function (req, res) {
-      console.log('trying to post');
-      console.log(req.body.username, req.body.message, req.body.roomname);
       models.messages.post(req.body.username, req.body.message, req.body.roomname);
       var header = Object.assign({}, headers);
       header['Content-Type'] = 'text/plain';

@@ -16,11 +16,16 @@ describe('Persistent Node Chat Server', function() {
     });
     dbConnection.connect();
 
-    var tablename = 'messages'; // TODO: fill this out
+    var msgTable = 'messages'; // TODO: fill this out
+    var userTable = 'users';
 
     /* Empty the db table before each test so that multiple tests
      * (or repeated runs of the tests) won't screw each other up: */
-    dbConnection.query('truncate ' + tablename, done);
+    dbConnection.query('SET FOREIGN_KEY_CHECKS=0;');
+    dbConnection.query('TRUNCATE ' + msgTable + ';');
+    dbConnection.query('TRUNCATE ' + userTable + ';');
+    dbConnection.query('SET FOREIGN_KEY_CHECKS=1;', done);
+    //dbConnection.query('truncate ' + userTable);
   });
 
   afterEach(function() {
@@ -40,7 +45,7 @@ describe('Persistent Node Chat Server', function() {
         uri: 'http://127.0.0.1:3000/classes/messages',
         json: {
           username: 'Valjean',
-          message: 'In mercy\'s name, three days is all I need.',
+          message: 'In mercy\\\'s name, three days is all I need.',
           roomname: 'Hello'
         }
       }, function () {
@@ -51,16 +56,16 @@ describe('Persistent Node Chat Server', function() {
         // your message table, since this is schema-dependent.
         var queryString = 'SELECT * FROM messages';
         var queryArgs = [];
-        done();
-        // dbConnection.query(queryString, queryArgs, function(err, results) {
-        //   // Should have one result:
-        //   expect(results.length).to.equal(1);
 
-        //   // TODO: If you don't have a column named text, change this test.
-        //   expect(results[0].text).to.equal('In mercy\'s name, three days is all I need.');
+        dbConnection.query(queryString, queryArgs, function(err, results) {
+          // Should have one result:
+          expect(results.length).to.equal(1);
 
-        //   done();
-        // });
+          // TODO: If you don't have a column named text, change this test.
+          expect(results[0].message).to.equal('In mercy\'s name, three days is all I need.');
+
+          done();
+        });
       });
     });
   });
