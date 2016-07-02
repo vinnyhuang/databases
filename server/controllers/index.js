@@ -11,6 +11,11 @@ var headers = {
 module.exports = {
   messages: {
     get: function (req, res) {
+      console.log('receiving messages get req');
+      models.messages.get(function(data) {
+        res.writeHead(200, headers);
+        res.end(JSON.stringify(data));
+      });
 
     }, // a function which handles a get request for all messages
     post: function (req, res) {
@@ -24,7 +29,9 @@ module.exports = {
 
   users: {
     // Ditto as above
-    get: function (req, res) {},
+    get: function (req, res) {
+      console.log('receiving users get req');
+    },
     post: function (req, res) {
       models.users.post(req.body.username);
       var header = Object.assign({}, headers);
