@@ -10,20 +10,42 @@ var headers = {
 
 module.exports = {
   messages: {
+    options: function (req, res) {
+      res.writeHead(204, headers);
+      res.end();
+    },
+
     get: function (req, res) {
-      console.log('receiving messages get req');
       models.messages.get(function(data) {
         res.writeHead(200, headers);
         res.end(JSON.stringify(data));
       });
 
     }, // a function which handles a get request for all messages
-    post: function (req, res) {
-      models.messages.post(req.body.username, req.body.message, req.body.roomname);
-      var header = Object.assign({}, headers);
-      header['Content-Type'] = 'text/plain';
-      res.writeHead(201, header);
-      res.end('Posted successfully');
+    post: function (req, res) {     
+      if (Object.keys(req.body).length !== 0) { // If data is passed through req.body
+        models.messages.post(req.body.username, req.body.message, req.body.roomname);
+        var header = Object.assign({}, headers);
+        header['Content-Type'] = 'text/plain';
+        res.writeHead(201, header);
+        res.end('Posted successfully');
+        return;
+      }
+      // Otherwise, data is passed in chunks.
+      var body = '';
+      req.on('data', function(chunk) {
+        body += chunk;
+      });
+
+      req.on('end', function() {
+        var pBody = JSON.parse(body);
+        console.dir(pBody);
+        models.messages.post(pBody.username, pBody.message, pBody.roomname);
+        var header = Object.assign({}, headers);
+        header['Content-Type'] = 'text/plain';
+        res.writeHead(201, header);
+        res.end('Posted successfully');
+      });
     }
   },
 

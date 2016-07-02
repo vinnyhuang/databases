@@ -18,8 +18,11 @@ CREATE TABLE messages (
 );
 
 /* Create other tables and define schemas for them here! */
+INSERT INTO users (name)
+VALUES ('bot');
 
-
+INSERT INTO messages (username, message, room) 
+VALUES (1, 'Welcome to chatterbox. Prepare to get chat on.', 'lobby');
 
 /*  Execute this file from the command line by typing:
  *    mysql -u root < server/schema.sql
