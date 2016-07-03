@@ -22,7 +22,7 @@ module.exports = {
       });
 
       connection.connect();
-      connection.query('SELECT users.name, messages.message, messages.room ' + 
+      connection.query('SELECT users.name, messages.id, messages.message, messages.room ' + 
                        'FROM messages INNER JOIN users ' +
                        'ON (users.id=messages.username);', function(err, rows) {
         if (err) { 

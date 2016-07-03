@@ -35,7 +35,6 @@ var app = {
     app.startSpinner();
     // Clear messages input
     app.$message.val('');
-    console.dir(data);
 
     // POST the message to the server
     $.ajax({
