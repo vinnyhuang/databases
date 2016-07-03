@@ -87,6 +87,11 @@ describe('Persistent Node Chat Server', function() {
         var messageLog = JSON.parse(body);
         expect(messageLog[0].message).to.equal('In mercy\'s name, three days is all I need.');
         expect(messageLog[0].room).to.equal('Hello');
+      });
+
+      request('http://127.0.0.1:3000/classes/users', function(error, response, body) {
+        var userLog = JSON.parse(body);
+        expect(userLog[0].name).to.equal('Valjean');
         done();
       });
     });

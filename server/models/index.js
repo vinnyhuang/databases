@@ -12,7 +12,9 @@ module.exports = {
 
   users: {
     // Ditto as above.
-    get: function () {},
+    get: function (cb) {
+      db.users.get(cb);
+    },
     post: function (name) {
       db.users.post(name);
     }

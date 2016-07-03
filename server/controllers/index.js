@@ -52,7 +52,10 @@ module.exports = {
   users: {
     // Ditto as above
     get: function (req, res) {
-      console.log('receiving users get req');
+      models.users.get(function(data) {
+        res.writeHead(200, headers);
+        res.end(JSON.stringify(data));
+      });
     },
     post: function (req, res) {
       models.users.post(req.body.username);

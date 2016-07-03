@@ -14,7 +14,6 @@ var mysql = require('mysql');
 module.exports = {
   messages: {
     get: function(cb) {
-      console.log('within DB get messages');
       var connection = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -60,7 +59,24 @@ module.exports = {
   },
 
   users: {
-    get: function() {},
+    get: function(cb) {
+      var connection = mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: '',
+        database: 'chat'
+      });
+
+      connection.connect();
+      connection.query('SELECT * FROM users', function(err, rows) {
+        if (err) { 
+          throw err;
+        }
+        cb(rows);
+
+      });
+      connection.end();
+    },
 
     post: function(name) {
       // console.log('INSERT INTO users (name) VALUES (\'' + name + '\');');
