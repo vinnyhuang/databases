@@ -40,11 +40,25 @@ module.exports = {
       req.on('end', function() {
         var pBody = JSON.parse(body);
         console.dir(pBody);
-        models.messages.post(pBody.username, pBody.message, pBody.roomname);
-        var header = Object.assign({}, headers);
-        header['Content-Type'] = 'text/plain';
-        res.writeHead(201, header);
-        res.end('Posted successfully');
+        models.users.get(function(usersCollection) {
+          var userExists = false;
+          for (var i = 0; i < usersCollection.length; i += 1) {
+            if (usersCollection[i].name === pBody.username) {
+              userExists = true;
+            }
+          }
+
+          if (!userExists) {
+            models.users.post(pBody.username);
+          } 
+
+          console.log(2);
+          models.messages.post(pBody.username, pBody.message, pBody.roomname);
+          var header = Object.assign({}, headers);
+          header['Content-Type'] = 'text/plain';
+          res.writeHead(201, header);
+          res.end('Posted successfully');
+        });
       });
     }
   },

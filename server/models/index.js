@@ -16,6 +16,7 @@ module.exports = {
       db.users.get(cb);
     },
     post: function (name) {
+      console.log(1);
       db.users.post(name);
     }
   }
