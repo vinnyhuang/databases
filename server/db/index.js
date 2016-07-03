@@ -22,10 +22,13 @@ module.exports = {
       });
 
       connection.connect();
-      connection.query('SELECT * FROM messages', function(err, rows) {
+      connection.query('SELECT users.name, messages.message, messages.room ' + 
+                       'FROM messages INNER JOIN users ' +
+                       'ON (users.id=messages.username);', function(err, rows) {
         if (err) { 
           throw err;
         }
+        console.log(rows);
         cb(rows);
 
       });

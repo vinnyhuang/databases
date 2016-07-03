@@ -12,7 +12,6 @@ var app = {
   init: function() {
     // Get username
     app.username = window.location.search.substr(10);
-
     // Cache jQuery selectors
     app.$message = $('#message');
     app.$chats = $('#chats');
@@ -153,10 +152,10 @@ var app = {
       // Add in the message data using DOM methods to avoid XSS
       // Store the username in the element's data
       var $username = $('<span class="username"/>');
-      $username.text(data.username + ': ').attr('data-username', data.username).attr('data-roomname', data.room).appendTo($chat);
+      $username.text(data.name + ': ').attr('data-username', data.name).attr('data-roomname', data.room).appendTo($chat);
 
       // Add the friend class
-      if (app.friends[data.username] === true) {
+      if (app.friends[data.name] === true) {
         $username.addClass('friend');
       }
 
